@@ -1,4 +1,5 @@
-type TaskType = {
+import { Document } from "mongoose";
+export type TaskType = {
   task: string;
   status: string;
 };

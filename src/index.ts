@@ -10,6 +10,7 @@ import morgan from "morgan";
 import { globalErrorHandler } from "./middlewares/global-error-handler.middleware";
 import { globalRateLimiter } from "./middlewares/limiter.middleware";
 import { authRouter } from "./routes/auth/auth.routes";
+import { taskRoute } from "./routes/task/task.routes";
 dotenv.config();
 const bootstrap = async () => {
   const app = express();
@@ -52,6 +53,7 @@ const bootstrap = async () => {
   });
   // Routes
   app.use("/api/auth", authRouter);
+  app.use("/api/task", taskRoute);
   // app.use("api", route);
   // Error handler
   app.use(globalErrorHandler);
