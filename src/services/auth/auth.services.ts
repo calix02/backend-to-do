@@ -17,3 +17,12 @@ export const registerS = async (data: AccountType) => {
   const account = await Account.create(data);
   return account;
 };
+
+export const getAccountS = async (id: string) => {
+  const account = await Account.findById(id);
+
+  if (!account) {
+    throw new Error("Account not found");
+  }
+  return account;
+};

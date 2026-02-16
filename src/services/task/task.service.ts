@@ -5,7 +5,6 @@ export const addTaskS = async (data: TaskType) => {
   const task = await Task.create(data);
   return task;
 };
-// Not yet done
 export const updateTaskS = async (id: string, data: Partial<TaskType>) => {
   const task = await Task.findById(id);
 
@@ -42,4 +41,10 @@ export const deleteTask = async (id: string) => {
   }
 
   return task;
+};
+
+// Not yet done
+export const getTotalS = async () => {
+  const total: number = await Task.countDocuments();
+  return total;
 };

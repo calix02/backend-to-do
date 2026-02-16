@@ -3,6 +3,7 @@ import {
   deleteTask,
   getAllS,
   getTaskS,
+  getTotalS,
   updateTaskS,
 } from "@/services/task/task.service";
 import { AppError } from "@/utils/error/app-error.util";
@@ -74,5 +75,15 @@ export const del = async (req: Request<{ id: string }>, res: Response) => {
 
   res.status(200).json({
     message: "Task Deleted!",
+  });
+};
+
+// Not yet done
+export const getTotal = async (req: Request, res: Response) => {
+  const total: number = await getTotalS();
+
+  res.status(200).json({
+    message: "Total Tasks fetched!",
+    total,
   });
 };

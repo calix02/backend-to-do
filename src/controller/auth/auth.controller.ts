@@ -1,4 +1,8 @@
-import { findAccountS, registerS } from "@/services/auth/auth.services";
+import {
+  findAccountS,
+  getAccountS,
+  registerS,
+} from "@/services/auth/auth.services";
 import { compareHashed, hashValue } from "@/utils/bcrypt/bcrypt";
 import { AppError } from "@/utils/error/app-error.util";
 import { Request, Response } from "express";
@@ -71,4 +75,18 @@ export const logout = async (req: Request, res: Response) => {
     throw new AppError("Account not found", 400);
   }
   res.status(200).json({ message: "Logout successfully.", account });
+};
+
+export const getAccount = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  const { id } = req.params;
+
+  const account = await getAccountS(id);
+
+  res.status(200).json({
+    message: "Account fetched successfully!",
+    account,
+  });
 };
