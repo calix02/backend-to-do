@@ -1,8 +1,10 @@
 import {
   addTaskS,
   deleteTask,
+  getCompleteS,
+  getInProgressS,
+  getNotStartedS,
   getTaskS,
-  getTasksByUserS,
   getTotalS,
   updateTaskS,
 } from "@/services/task/task.service";
@@ -97,13 +99,13 @@ export const getTotal = async (req: Request, res: Response) => {
   });
 };
 
-export const getTasksByUser = async (
+export const getCompleted = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    let { account_id } = req.params;
+    let { account_id } = req.body;
 
     // Make sure it's a string
     if (Array.isArray(account_id)) account_id = account_id[0];
@@ -117,7 +119,69 @@ export const getTasksByUser = async (
     const accountObjectId = new mongoose.Types.ObjectId(account_id);
 
     // Query tasks
-    const tasks = await getTasksByUserS(accountObjectId);
+    const tasks = await getCompleteS(accountObjectId);
+
+    res.status(200).json({
+      message: "Tasks retrieved successfully",
+      tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getInProgress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    let { account_id } = req.body;
+
+    // Make sure it's a string
+    if (Array.isArray(account_id)) account_id = account_id[0];
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(account_id)) {
+      return res.status(400).json({ message: "Invalid account ID" });
+    }
+
+    // Convert to ObjectId
+    const accountObjectId = new mongoose.Types.ObjectId(account_id);
+
+    // Query tasks
+    const tasks = await getInProgressS(accountObjectId);
+
+    res.status(200).json({
+      message: "Tasks retrieved successfully",
+      tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getNotStarted = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    let { account_id } = req.body;
+
+    // Make sure it's a string
+    if (Array.isArray(account_id)) account_id = account_id[0];
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(account_id)) {
+      return res.status(400).json({ message: "Invalid account ID" });
+    }
+
+    // Convert to ObjectId
+    const accountObjectId = new mongoose.Types.ObjectId(account_id);
+
+    // Query tasks
+    const tasks = await getNotStartedS(accountObjectId);
 
     res.status(200).json({
       message: "Tasks retrieved successfully",

@@ -1,8 +1,10 @@
 import {
   add,
   del,
+  getCompleted,
+  getInProgress,
+  getNotStarted,
   getOne,
-  getTasksByUser,
   getTotal,
   update,
 } from "@/controller/task/task.controller";
@@ -22,4 +24,6 @@ taskRoute.delete("/:id", del);
 taskRoute.get("/getone", getOne);
 taskRoute.get("/total", getTotal);
 
-taskRoute.get("/:id", getTasksByUser);
+taskRoute.get("/getcompleted", getCompleted);
+taskRoute.get("/getinprogress", getInProgress);
+taskRoute.get("/getnotstarted", getNotStarted);

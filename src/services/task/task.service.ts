@@ -37,14 +37,48 @@ export const updateTaskS = async (id: string, data: Partial<TaskType>) => {
   return task;
 };
 
-export const getTasksByUserS = async (
+export const getCompleteS = async (
   accountId: mongoose.Types.ObjectId,
 ): Promise<TaskDocumentType[]> => {
   if (!mongoose.Types.ObjectId.isValid(accountId)) {
     throw new Error("Invalid account ID");
   }
 
-  const tasks = await Task.find({ account_id: accountId }).sort({
+  const tasks = await Task.find({
+    account_id: accountId,
+    status: "Completed",
+  }).sort({
+    createdAt: -1,
+  });
+  return tasks;
+};
+
+export const getInProgressS = async (
+  accountId: mongoose.Types.ObjectId,
+): Promise<TaskDocumentType[]> => {
+  if (!mongoose.Types.ObjectId.isValid(accountId)) {
+    throw new Error("Invalid account ID");
+  }
+
+  const tasks = await Task.find({
+    account_id: accountId,
+    status: "In progress",
+  }).sort({
+    createdAt: -1,
+  });
+  return tasks;
+};
+export const getNotStartedS = async (
+  accountId: mongoose.Types.ObjectId,
+): Promise<TaskDocumentType[]> => {
+  if (!mongoose.Types.ObjectId.isValid(accountId)) {
+    throw new Error("Invalid account ID");
+  }
+
+  const tasks = await Task.find({
+    account_id: accountId,
+    status: "Not started",
+  }).sort({
     createdAt: -1,
   });
   return tasks;
