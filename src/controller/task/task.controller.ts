@@ -1,27 +1,45 @@
 import {
   addTaskS,
   deleteTask,
-  getAllS,
   getTaskS,
+  getTasksByUserS,
   getTotalS,
   updateTaskS,
 } from "@/services/task/task.service";
+import { TaskType } from "@/types/task/task.type";
 import { AppError } from "@/utils/error/app-error.util";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 
-export const add = async (req: Request, res: Response) => {
-  const { task, status } = req.body;
+export const add = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { account_id, task, status } = req.body;
 
-  if (!task || !status) {
-    throw new AppError("Cannot Add a task!", 400);
+    // Validate required fields
+    if (!task || !status || !account_id) {
+      throw new AppError("account_id, task and status are required", 400);
+    }
+
+    // Validate account_id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(account_id)) {
+      throw new AppError("Invalid account ID", 400);
+    }
+
+    const taskData: TaskType = {
+      account_id: new mongoose.Types.ObjectId(account_id),
+      task,
+      status,
+    };
+
+    const createdTask = await addTaskS(taskData);
+
+    res.status(201).json({
+      message: "Task added successfully!",
+      task: createdTask,
+    });
+  } catch (error) {
+    next(error); // pass to error-handling middleware
   }
-
-  const tasks = await addTaskS({
-    task,
-    status,
-  });
-
-  res.status(200).json({ message: "Task added successfully!", tasks });
 };
 
 export const update = async (req: Request<{ id: string }>, res: Response) => {
@@ -48,17 +66,8 @@ export const update = async (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-export const get = async (req: Request, res: Response) => {
-  const tasks = await getAllS();
-
-  res.status(200).json({
-    message: "Tasks fetched successfully!",
-    tasks,
-  });
-};
-
-export const getOne = async (req: Request<{ id: string }>, res: Response) => {
-  const { id } = req.params;
+export const getOne = async (req: Request, res: Response) => {
+  const { id } = req.body;
 
   const task = await getTaskS(id);
 
@@ -86,4 +95,35 @@ export const getTotal = async (req: Request, res: Response) => {
     message: "Total Tasks fetched!",
     total,
   });
+};
+
+export const getTasksByUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    let { account_id } = req.params;
+
+    // Make sure it's a string
+    if (Array.isArray(account_id)) account_id = account_id[0];
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(account_id)) {
+      return res.status(400).json({ message: "Invalid account ID" });
+    }
+
+    // Convert to ObjectId
+    const accountObjectId = new mongoose.Types.ObjectId(account_id);
+
+    // Query tasks
+    const tasks = await getTasksByUserS(accountObjectId);
+
+    res.status(200).json({
+      message: "Tasks retrieved successfully",
+      tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
