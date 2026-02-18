@@ -24,6 +24,6 @@ taskRoute.delete("/:id", del);
 taskRoute.get("/getone", getOne);
 taskRoute.get("/total", getTotal);
 
-taskRoute.get("/getcompleted", getCompleted);
-taskRoute.get("/getinprogress", getInProgress);
-taskRoute.get("/getnotstarted", getNotStarted);
+taskRoute.post("/getcompleted", getCompleted);
+taskRoute.post("/getinprogress", getInProgress);
+taskRoute.post("/getnotstarted", getNotStarted);
