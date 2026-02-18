@@ -4,6 +4,7 @@ import {
   registerS,
 } from "@/services/auth/auth.services";
 import { compareHashed, hashValue } from "@/utils/bcrypt/bcrypt";
+import { sendScheduleConfirmationEmail } from "@/utils/email/scheduleConfirmationEmail";
 import { AppError } from "@/utils/error/app-error.util";
 import { Request, Response } from "express";
 
@@ -31,6 +32,10 @@ export const register = async (req: Request, res: Response) => {
     email,
     password: hashedPassword,
   });
+
+  console.log(email);
+
+  await sendScheduleConfirmationEmail(email);
 
   //Return response
   res
