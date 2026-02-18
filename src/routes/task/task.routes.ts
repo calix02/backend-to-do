@@ -4,8 +4,6 @@ import {
   getCompleted,
   getInProgress,
   getNotStarted,
-  getOne,
-  getTotal,
   update,
 } from "@/controller/task/task.controller";
 import { Router } from "express";
@@ -18,12 +16,9 @@ taskRoute.post("/add", add);
 taskRoute.put("/update/:id", update);
 
 // Delete
-taskRoute.delete("/:id", del);
+taskRoute.delete("/delete/:id", del);
 
 // Get
-taskRoute.get("/getone", getOne);
-taskRoute.get("/total", getTotal);
-
 taskRoute.post("/getcompleted", getCompleted);
 taskRoute.post("/getinprogress", getInProgress);
 taskRoute.post("/getnotstarted", getNotStarted);
