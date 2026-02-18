@@ -15,7 +15,7 @@ export const taskRoute = Router();
 taskRoute.post("/add", add);
 
 //Update
-taskRoute.put("/:id", update);
+taskRoute.put("/update/:id", update);
 
 // Delete
 taskRoute.delete("/:id", del);
