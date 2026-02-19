@@ -5,6 +5,7 @@ import {
   register,
   updateAccount,
 } from "@/controller/auth/auth.controller";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 import { Router } from "express";
 
 export const authRouter = Router();
@@ -12,5 +13,5 @@ export const authRouter = Router();
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/logout", logout);
-authRouter.get("/:id", getAccount);
+authRouter.get("/:id",  getAccount);
 authRouter.put("/update/:id", updateAccount);
