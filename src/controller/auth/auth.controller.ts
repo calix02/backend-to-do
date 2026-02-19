@@ -2,6 +2,7 @@ import {
   findAccountS,
   getAccountS,
   registerS,
+  updateAccountS,
 } from "@/services/auth/auth.services";
 import { compareHashed, hashValue } from "@/utils/bcrypt/bcrypt";
 import { sendScheduleConfirmationEmail } from "@/utils/email/scheduleConfirmationEmail";
@@ -94,4 +95,31 @@ export const getAccount = async (
     message: "Account fetched successfully!",
     account,
   });
+};
+
+export const updateAccount = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  if (!id) {
+    throw new AppError("Task ID is required", 400);
+  }
+
+  if (!Object.keys(data).length) {
+    throw new AppError("No update data provided", 400);
+  }
+
+  try {
+    const updateTask = await updateAccountS(id, data);
+
+    res.status(200).json({
+      message: "Account updated successfully!",
+      updateTask,
+    });
+  } catch (error: any) {
+    throw new AppError(error.message || "Update failed", 404);
+  }
 };

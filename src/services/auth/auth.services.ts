@@ -26,3 +26,18 @@ export const getAccountS = async (id: string) => {
   }
   return account;
 };
+export const updateAccountS = async (
+  id: string,
+  data: Partial<AccountType>,
+) => {
+  const user = await Account.findById(id);
+
+  if (!user) {
+    throw new Error("Task not found!");
+  }
+
+  Object.assign(user, data);
+  await user.save();
+
+  return user;
+};
