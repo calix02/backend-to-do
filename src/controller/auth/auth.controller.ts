@@ -13,9 +13,6 @@ import jwt from "jsonwebtoken";
 export const register = async (req: Request, res: Response) => {
   //Get body data
   const { name, email, password } = req.body;
-  //   if (!name) throw new AppError("Name is required.", 400);
-  //   if (!email) throw new AppError("Email is required.", 400);
-  //   if (!password) throw new AppError("Password is required.", 400);
 
   //Check if fields have data
   if (!name || !email || !password)
@@ -34,8 +31,6 @@ export const register = async (req: Request, res: Response) => {
     email,
     password: hashedPassword,
   });
-
-  console.log(email);
 
   await sendScheduleConfirmationEmail(email);
 
@@ -87,21 +82,6 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({ message: "Logout successfully." });
 };
 
-/**
-export const getAccount = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-
-  const account = await getAccountS(id);
-
-  res.status(200).json({
-    message: "Account fetched successfully!",
-    account,
-  });
-};
- */
 export const getAccount = async (
   req: Request & { user?: any },
   res: Response,
@@ -115,34 +95,6 @@ export const getAccount = async (
     account,
   });
 };
-/**
-export const updateAccount = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const data = req.body;
-
-  if (!id) {
-    throw new AppError("Task ID is required", 400);
-  }
-
-  if (!Object.keys(data).length) {
-    throw new AppError("No update data provided", 400);
-  }
-
-  try {
-    const updateTask = await updateAccountS(id, data);
-
-    res.status(200).json({
-      message: "Account updated successfully!",
-      updateTask,
-    });
-  } catch (error: any) {
-    throw new AppError(error.message || "Update failed", 404);
-  }
-};
- */
 
 export const updateAccount = async (
   req: Request & { user?: any },
